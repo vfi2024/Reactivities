@@ -4,9 +4,10 @@ import type { FormEvent } from "react";
 type Props= {
     activity?: Activity
     closeForm: () => void
+    submitForm: (activity:Activity) => void
 }
 
-export default function ActivityForm({activity, closeForm}: Props){
+export default function ActivityForm({activity, closeForm, submitForm}: Props){
     
     const handleSubmit = (event : FormEvent<HTMLFormElement>) => { 
         event.preventDefault();
@@ -17,8 +18,10 @@ export default function ActivityForm({activity, closeForm}: Props){
         formData.forEach((value,key)=>{
             data[key]=value;
         })
+   
+       if(activity) data.id=activity.id
 
-        console.log(event);
+       submitForm(data as unknown as Activity)
     }
     
     return (
@@ -34,12 +37,15 @@ export default function ActivityForm({activity, closeForm}: Props){
             <TextField label='Date'  type="date" name="date"  defaultValue={activity?.date}/>
             <TextField label='City' name="city"  defaultValue={activity?.city}/>
             <TextField label='Venue' name="venue" defaultValue={activity?.venue} />
-         </Box>
-         <Box display='flex' justifyContent='end' gap={3}>
+
+          <Box display='flex' justifyContent='end' gap={3}>
               <Button color='inherit' onClick={closeForm} >Cancel</Button>
               <Button type="submit" color='success' variant="contained">Submit</Button>
          </Box>
 
+            
+         </Box>
+       
         </Paper>
         
     )
